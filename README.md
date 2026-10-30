@@ -26,3 +26,15 @@ Checkpoint responses are in [ANSWERS.md](ANSWERS.md).
 ## Submission
 
 The work branch is `task/interactive-profile-card`, with a commit for each step. Push the branches to a new GitHub repository, open a Pull Request with screenshots or a short recording, and merge it into `main` to meet the LMS submission instructions. Submit the repository link.
+
+## Android screenshots
+
+Initial state:
+
+![Initial profile](screenshot-initial.png)
+
+Following with the message composer open:
+
+![Interactive profile](screenshot-interactive.png)
+
+The app was tested in the Android emulator. Android, iOS and web exports also passed, along with browser checks for state transitions and message validation.
