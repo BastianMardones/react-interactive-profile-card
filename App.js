@@ -30,6 +30,9 @@ function formatCount(n) {
 
 export default function App() {
 
+  const [isBioExpanded, setIsBioExpanded] = useState(false);
+  const [isOnline, setIsOnline] = useState(true);
+  const [selectedSkills, setSelectedSkills] = useState([]);
   const [isComposerOpen, setIsComposerOpen] = useState(false);
   const [message, setMessage] = useState('');
   const isSendDisabled = message.trim().length === 0;
@@ -45,6 +48,9 @@ export default function App() {
 
 
 
+  function handleSkillPress(skill) {
+    setSelectedSkills(previous => previous.includes(skill) ? previous.filter(item => item !== skill) : [...previous, skill]);
+  }
   function handleFollowPress() { setIsFollowing(previous => !previous); }
   function handleMessagePress() { setIsComposerOpen(previous => !previous); }
   function handleSendPress() {
@@ -70,10 +76,10 @@ export default function App() {
         <View style={styles.body}>
           <View style={styles.headerRow}>
             
-            <View>
+            <Pressable accessibilityRole="button" accessibilityLabel={isOnline ? "Set status offline" : "Set status online"} onPress={() => setIsOnline(previous => !previous)} style={({ pressed }) => [pressed && styles.pressed]}>
               <Image source={require('./assets/avatar.png')} style={styles.avatar} />
-              <View style={styles.onlineBadge} />
-            </View>
+              <View style={[styles.onlineBadge, !isOnline && styles.offlineBadge]} />
+            </Pressable>
             <View style={styles.headerText}>
               <Text style={styles.name}>Alex Rivera</Text>
               <Text style={styles.role}>Mobile Developer</Text>
@@ -82,10 +88,11 @@ export default function App() {
           </View>
 
           
-          <Text style={styles.bio} numberOfLines={3}>
+          <Text style={styles.bio} numberOfLines={isBioExpanded ? undefined : 3}>
             {BIO}
           </Text>
 
+          <Pressable accessibilityRole="button" accessibilityState={{ expanded: isBioExpanded }} onPress={() => setIsBioExpanded(previous => !previous)} style={({ pressed }) => [pressed && styles.pressed]}><Text style={styles.link}>{isBioExpanded ? 'Show less' : 'Read more'}</Text></Pressable>
           <View style={styles.statsRow}>
             {stats.map((item, index) => (
               <View
@@ -101,13 +108,14 @@ export default function App() {
           
           <View style={styles.tags}>
             {SKILLS.map((skill) => (
-              <View key={skill} style={styles.tag}>
-                <Text style={styles.tagText}>{skill}</Text>
-              </View>
+              <Pressable key={skill} accessibilityRole="button" accessibilityState={{ selected: selectedSkills.includes(skill) }} onPress={() => handleSkillPress(skill)} style={({ pressed }) => [styles.tag, selectedSkills.includes(skill) && styles.tagSelected, pressed && styles.pressed]}>
+                <Text style={[styles.tagText, selectedSkills.includes(skill) && styles.tagTextSelected]}>{skill}</Text>
+              </Pressable>
             ))}
           </View>
 
           
+          <Text style={styles.hint}>Tap a skill to select it · {selectedSkills.length} selected</Text>
           <View style={styles.actions}>
             <Pressable accessibilityRole="button" onPress={handleFollowPress} style={({ pressed }) => [styles.button, styles.buttonPrimary, isFollowing && styles.buttonFollowing, pressed && styles.pressed]}>
               <Text style={[styles.buttonText, !isFollowing && styles.buttonTextPrimary]}>{isFollowing ? 'Following' : 'Follow'}</Text>
