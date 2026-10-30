@@ -1,3 +1,4 @@
+import { useState } from 'react';
 
 
 
@@ -28,7 +29,8 @@ function formatCount(n) {
 
 export default function App() {
 
-  const followers = BASE_FOLLOWERS;
+  const [isFollowing, setIsFollowing] = useState(false);
+  const followers = BASE_FOLLOWERS + (isFollowing ? 1 : 0);
   const stats = [
     { label: 'Projects', value: '24' },
     { label: 'Followers', value: formatCount(followers) },
@@ -39,7 +41,7 @@ export default function App() {
 
 
 
-  function handleFollowPress() { Alert.alert('Follow', 'You pressed Follow'); }
+  function handleFollowPress() { setIsFollowing(previous => !previous); }
   function handleMessagePress() { Alert.alert('Message', 'You pressed Message'); }
   function handleSharePress() { Alert.alert('Share profile', 'Alex Rivera — Mobile Developer, Lisbon, Portugal'); }
 
@@ -97,8 +99,8 @@ export default function App() {
 
           
           <View style={styles.actions}>
-            <Pressable accessibilityRole="button" onPress={handleFollowPress} style={({ pressed }) => [styles.button, styles.buttonPrimary, pressed && styles.pressed]}>
-              <Text style={[styles.buttonText, styles.buttonTextPrimary]}>Follow</Text>
+            <Pressable accessibilityRole="button" onPress={handleFollowPress} style={({ pressed }) => [styles.button, styles.buttonPrimary, isFollowing && styles.buttonFollowing, pressed && styles.pressed]}>
+              <Text style={[styles.buttonText, !isFollowing && styles.buttonTextPrimary]}>{isFollowing ? 'Following' : 'Follow'}</Text>
             </Pressable>
             <Pressable accessibilityRole="button" onPress={handleMessagePress} style={({ pressed }) => [styles.button, pressed && styles.pressed]}>
               <Text style={styles.buttonText}>Message</Text>
