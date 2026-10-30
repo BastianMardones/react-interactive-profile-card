@@ -97,10 +97,10 @@ export default function App() {
 
           
           <View style={styles.actions}>
-            <Pressable accessibilityRole="button" onPress={handleFollowPress} style={[styles.button, styles.buttonPrimary]}>
+            <Pressable accessibilityRole="button" onPress={handleFollowPress} style={({ pressed }) => [styles.button, styles.buttonPrimary, pressed && styles.pressed]}>
               <Text style={[styles.buttonText, styles.buttonTextPrimary]}>Follow</Text>
             </Pressable>
-            <Pressable accessibilityRole="button" onPress={handleMessagePress} style={styles.button}>
+            <Pressable accessibilityRole="button" onPress={handleMessagePress} style={({ pressed }) => [styles.button, pressed && styles.pressed]}>
               <Text style={styles.buttonText}>Message</Text>
             </Pressable>
           </View>
