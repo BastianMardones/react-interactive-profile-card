@@ -1,7 +1,7 @@
-// TASK 2 — Interactive Profile Card (starter)
-// Start point: the solution of Task 1 + the new data. Follow the steps in README.md.
-// TODO: add the imports you need in each step (Pressable, Button, Alert, TextInput, useState...)
-import { View, Text, Image, ScrollView, StyleSheet, Platform } from 'react-native';
+
+
+
+import { View, Text, Image, ScrollView, StyleSheet, Platform, Pressable, Button, Alert, TextInput } from 'react-native';
 
 const COLORS = {
   background: '#EEF1F6',
@@ -20,15 +20,14 @@ const BIO =
 
 const SKILLS = ['React Native', 'JavaScript', 'UI Design', 'Git', 'Flexbox'];
 const BASE_FOLLOWERS = 1200;
-// TODO STEP 4: const MAX_MESSAGE = 140;
 
-// Adds thousands separators: 1200 -> '1,200'
+
 function formatCount(n) {
   return String(n).replace(/\B(?=(\d{3})+(?!\d))/g, ',');
 }
 
 export default function App() {
-  // STEP 3: followers must grow by 1 while you are following
+
   const followers = BASE_FOLLOWERS;
   const stats = [
     { label: 'Projects', value: '24' },
@@ -36,10 +35,13 @@ export default function App() {
     { label: 'Following', value: '180' },
   ];
 
-  // TODO STEP 1: write the event handlers (handleFollowPress, handleMessagePress, handleSharePress)
-  // TODO STEP 3: add the state for follow / unfollow (useState)
-  // TODO STEP 4: add the state for the message composer
-  // TODO STEP 5: add the state for the bio, the online status and the selected skills
+
+
+
+
+  function handleFollowPress() { Alert.alert('Follow', 'You pressed Follow'); }
+  function handleMessagePress() { Alert.alert('Message', 'You pressed Message'); }
+  function handleSharePress() { Alert.alert('Share profile', 'Alex Rivera — Mobile Developer, Lisbon, Portugal'); }
 
   return (
     <ScrollView
@@ -55,7 +57,7 @@ export default function App() {
         />
         <View style={styles.body}>
           <View style={styles.headerRow}>
-            {/* TODO STEP 5: make the avatar pressable to toggle the online status */}
+            
             <View>
               <Image source={require('./assets/avatar.png')} style={styles.avatar} />
               <View style={styles.onlineBadge} />
@@ -67,7 +69,7 @@ export default function App() {
             </View>
           </View>
 
-          {/* TODO STEP 5: add a 'Read more' / 'Show less' link to expand the bio */}
+          
           <Text style={styles.bio} numberOfLines={3}>
             {BIO}
           </Text>
@@ -84,7 +86,7 @@ export default function App() {
             ))}
           </View>
 
-          {/* TODO STEP 5: make the skills selectable (Pressable + array state) */}
+          
           <View style={styles.tags}>
             {SKILLS.map((skill) => (
               <View key={skill} style={styles.tag}>
@@ -93,21 +95,18 @@ export default function App() {
             ))}
           </View>
 
-          {/* TODO STEP 1-3: turn these two Views into Pressable components with onPress.
-                STEP 2: give them visual feedback with the style function (pressed).
-                STEP 3: make the Follow button toggle between 'Follow' and 'Following'. */}
+          
           <View style={styles.actions}>
-            <View style={[styles.button, styles.buttonPrimary]}>
+            <Pressable accessibilityRole="button" onPress={handleFollowPress} style={[styles.button, styles.buttonPrimary]}>
               <Text style={[styles.buttonText, styles.buttonTextPrimary]}>Follow</Text>
-            </View>
-            <View style={styles.button}>
+            </Pressable>
+            <Pressable accessibilityRole="button" onPress={handleMessagePress} style={styles.button}>
               <Text style={styles.buttonText}>Message</Text>
-            </View>
+            </Pressable>
           </View>
 
-          {/* TODO STEP 4: when 'Message' is pressed, show a composer here (TextInput + counter + Send) */}
-
-          {/* TODO STEP 1: add a 'Share profile' Button (core component) here */}
+          <View style={styles.shareWrapper}><Button title="Share profile" color={COLORS.primary} onPress={handleSharePress} /></View>
+          
         </View>
       </View>
     </ScrollView>
@@ -270,4 +269,71 @@ const styles = StyleSheet.create({
   buttonTextPrimary: {
     color: '#FFFFFF',
   },
+  buttonFollowing: {
+    backgroundColor: COLORS.primaryLight,
+  },
+  composer: {
+    marginTop: 16,
+  },
+  composerFooter: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    marginTop: 8,
+  },
+  counter: {
+    fontSize: 12,
+    color: COLORS.muted,
+  },
+  hint: {
+    marginTop: 8,
+    fontSize: 12,
+    color: COLORS.muted,
+  },
+  input: {
+    height: 44,
+    paddingHorizontal: 12,
+    fontSize: 15,
+    color: COLORS.text,
+    borderWidth: 1,
+    borderColor: COLORS.border,
+    borderRadius: 12,
+  },
+  link: {
+    marginTop: 4,
+    fontSize: 14,
+    fontWeight: '600',
+    color: COLORS.primary,
+  },
+  offlineBadge: {
+    backgroundColor: COLORS.offline,
+  },
+  pressed: {
+    opacity: 0.6,
+  },
+  sendButton: {
+    paddingHorizontal: 20,
+    paddingVertical: 8,
+    borderRadius: 10,
+    backgroundColor: COLORS.primary,
+  },
+  sendButtonDisabled: {
+    backgroundColor: COLORS.offline,
+  },
+  sendText: {
+    fontSize: 14,
+    fontWeight: '600',
+    color: '#FFFFFF',
+  },
+  shareWrapper: {
+    marginTop: 12,
+    alignItems: 'center',
+  },
+  tagSelected: {
+    backgroundColor: COLORS.primary,
+  },
+  tagTextSelected: {
+    color: '#FFFFFF',
+  },
+
 });
