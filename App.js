@@ -21,6 +21,7 @@ const BIO =
 
 const SKILLS = ['React Native', 'JavaScript', 'UI Design', 'Git', 'Flexbox'];
 const BASE_FOLLOWERS = 1200;
+const MAX_MESSAGE = 140;
 
 
 function formatCount(n) {
@@ -29,6 +30,9 @@ function formatCount(n) {
 
 export default function App() {
 
+  const [isComposerOpen, setIsComposerOpen] = useState(false);
+  const [message, setMessage] = useState('');
+  const isSendDisabled = message.trim().length === 0;
   const [isFollowing, setIsFollowing] = useState(false);
   const followers = BASE_FOLLOWERS + (isFollowing ? 1 : 0);
   const stats = [
@@ -42,7 +46,13 @@ export default function App() {
 
 
   function handleFollowPress() { setIsFollowing(previous => !previous); }
-  function handleMessagePress() { Alert.alert('Message', 'You pressed Message'); }
+  function handleMessagePress() { setIsComposerOpen(previous => !previous); }
+  function handleSendPress() {
+    if (isSendDisabled) return;
+    Alert.alert('Message sent', message.trim());
+    setMessage('');
+    setIsComposerOpen(false);
+  }
   function handleSharePress() { Alert.alert('Share profile', 'Alex Rivera — Mobile Developer, Lisbon, Portugal'); }
 
   return (
@@ -103,10 +113,21 @@ export default function App() {
               <Text style={[styles.buttonText, !isFollowing && styles.buttonTextPrimary]}>{isFollowing ? 'Following' : 'Follow'}</Text>
             </Pressable>
             <Pressable accessibilityRole="button" onPress={handleMessagePress} style={({ pressed }) => [styles.button, pressed && styles.pressed]}>
-              <Text style={styles.buttonText}>Message</Text>
+              <Text style={styles.buttonText}>{isComposerOpen ? 'Close' : 'Message'}</Text>
             </Pressable>
           </View>
 
+          {isComposerOpen && (
+            <View style={styles.composer}>
+              <TextInput accessibilityLabel="Message text" style={styles.input} value={message} onChangeText={setMessage} maxLength={MAX_MESSAGE} placeholder="Write a message..." placeholderTextColor={COLORS.muted} />
+              <View style={styles.composerFooter}>
+                <Text style={styles.counter}>{message.length}/{MAX_MESSAGE} characters</Text>
+                <Pressable accessibilityRole="button" disabled={isSendDisabled} accessibilityState={{ disabled: isSendDisabled }} onPress={handleSendPress} style={({ pressed }) => [styles.sendButton, isSendDisabled && styles.sendButtonDisabled, pressed && styles.pressed]}>
+                  <Text style={styles.sendText}>Send</Text>
+                </Pressable>
+              </View>
+            </View>
+          )}
           <View style={styles.shareWrapper}><Button title="Share profile" color={COLORS.primary} onPress={handleSharePress} /></View>
           
         </View>
